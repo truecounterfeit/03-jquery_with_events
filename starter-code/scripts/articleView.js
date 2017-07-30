@@ -58,7 +58,15 @@ articleView.handleCategoryFilter = function() {
   //       When an option with a value is selected, hide all the articles, then reveal the matches.
   //       When the blank (default) option is selected, show all the articles, except for the template.
   //       Be sure to reset the #author-filter while you are at it!
-
+  $('#category-filter').on('change', function() {
+    if ($(this).val()) {
+      $('article').hide();
+      $('article[data-category="' + $(this).val() + '"]').fadeIn();
+    } else {
+      $('article').not('.template').show();
+    }
+    $('#author-filter').val('');
+  });
 };
 
 articleView.handleMainNav = function() {
@@ -67,7 +75,10 @@ articleView.handleMainNav = function() {
   //       single .tab-content section that is associated with the clicked .tab element.
   //       So: You need to dynamically build a selector string with the correct ID, based on the
   //       data available to you on the .tab element that was clicked.
-
+  $('.tab').on('click', function() {
+    $('.tab-content').hide();
+    $('.tab-content[id="' + $(this).attr('data-content') + '"]').fadeIn();
+  });
 
   $('.main-nav .tab:first').click(); // Let's now trigger a click on the first .tab element, to set up the page.
 };
@@ -82,12 +93,18 @@ articleView.setTeasers = function() {
   //       process any .read-on clicks that happen within child nodes.
 
   // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
+  $('.read-on').on('click', function() {
+    $('.article-body *:nth-of-type(n+2)').show();
+  });
 
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
 articleView.populateFilters();
 articleView.handleAuthorFilter();
+articleView.handleCategoryFilter();
+articleView.handleMainNav();
+articleView.setTeasers();
 
 $(document).ready(function() {
 
